@@ -9,6 +9,7 @@ public class ServerManager : MonoBehaviour
     {
         NetworkManager.Singleton.NetworkConfig.ConnectionApproval = true;
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
+        Application.targetFrameRate = 60;
     }
 
     // Update is called once per frame

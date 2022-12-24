@@ -45,6 +45,7 @@ public class NetworkGUI : MonoBehaviour
 
     static void SubmitNewPosition()
     {
+        /*
         if (GUILayout.Button(NetworkManager.Singleton.IsServer ? "Move" : "Request Position Change"))
         {
             if (NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsClient)
@@ -59,5 +60,6 @@ public class NetworkGUI : MonoBehaviour
                 player.Move();
             }
         }
+        */
     }
 }
