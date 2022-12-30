@@ -41,6 +41,7 @@ public class NetworkGUI : MonoBehaviour
         GUILayout.Label("Transport: " +
             NetworkManager.Singleton.NetworkConfig.NetworkTransport.GetType().Name);
         GUILayout.Label("Mode: " + mode);
+        GUILayout.Label("FPS: " + 1 / Time.deltaTime);
     }
 
     static void SubmitNewPosition()
