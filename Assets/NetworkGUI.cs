@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -5,8 +6,19 @@ using Unity.Netcode.Transports.UTP;
 using Unity.Networking;
 using UnityEngine;
 
-public class NetworkGUI : MonoBehaviour
+public class NetworkGUI : NetworkBehaviour
 {
+    static public NetworkVariable<ServerVars> serverVars = new NetworkVariable<ServerVars>(new ServerVars());
+
+    private void OnServerInitialized()
+    {
+        serverVars.Initialize(this);
+        ServerVars var = new ServerVars();
+        var.matchEndTimestamp = DateTime.MinValue;
+        var.blueScore = 0;
+        var.redScore = 0;
+        serverVars.Value = var;
+    }
 
     void OnGUI()
     {
@@ -23,6 +35,44 @@ public class NetworkGUI : MonoBehaviour
         }
 
         GUILayout.EndArea();
+        if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsServer)
+        {
+            GUILayout.BeginArea(new Rect(350, 10, 300, 300));
+            if (NetworkManager.Singleton.IsServer)
+            {
+                ServerButtons();
+                serverVars.Initialize(this);
+            }
+            ShowServerVars();
+            GUILayout.EndArea();
+        }
+    }
+
+    static void ServerButtons()
+    {
+        if (!serverVars.Value.runningMatch)
+        {
+            if (GUILayout.Button("Start Match")) { ServerVars var = serverVars.Value; var.matchEndTimestamp = DateTime.UtcNow.AddMinutes(7); serverVars.Value = var; }
+        }
+        else
+        {
+            if (GUILayout.Button("Add Point Red")) { ServerVars var = serverVars.Value; var.redScore++; serverVars.Value = var; }
+            if (GUILayout.Button("Add Point Blue")) { ServerVars var = serverVars.Value; var.blueScore++; serverVars.Value = var; }
+        }
+    }
+
+    static void ShowServerVars()
+    {
+        if (serverVars.Value.runningMatch)
+        {
+            GUILayout.Label("Match Ends In: " + Convert.ToDateTime(serverVars.Value.matchEndTimestamp.Subtract(DateTime.UtcNow).ToString()).ToString("m:ss"));
+            GUILayout.Label("Red Score: " + serverVars.Value.redScore);
+            GUILayout.Label("Blue Score: " + serverVars.Value.blueScore);
+        }
+        else
+        {
+            GUILayout.Label("Match Not Running");
+        }
     }
 
     static void StartButtons()
@@ -63,4 +113,11 @@ public class NetworkGUI : MonoBehaviour
         }
         */
     }
+}
+public struct ServerVars
+{
+    public readonly bool runningMatch => /*matchEndTimestamp == null ? false :*/ matchEndTimestamp > DateTime.UtcNow;
+    public DateTime/*?*/ matchEndTimestamp;
+    public int/*?*/ redScore;
+    public int/*?*/ blueScore;
 }

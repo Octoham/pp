@@ -30,11 +30,11 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (followTransform == null && HelloWorldPlayer.localPlayer.transform != null)
+        if (followTransform == null && Player.localPlayer.transform != null)
         {
-            followTransform = HelloWorldPlayer.localPlayer.transform;
+            followTransform = Player.localPlayer.transform;
         }
-        if (followTransform)
+        if (followTransform != null)
         {
             camY = Mathf.Clamp(followTransform.position.y, yMin + camOrthsize, yMax - camOrthsize);
             camX = Mathf.Clamp(followTransform.position.x, xMin + cameraRatio, xMax - cameraRatio);

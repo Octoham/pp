@@ -2,7 +2,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
-public class HelloWorldPlayer : NetworkBehaviour
+public class Player : NetworkBehaviour
 {
     public float acceleration = 500f; // kg*m/s²
     public float airAcceleration = 100f; // kg*m/s²
@@ -11,7 +11,7 @@ public class HelloWorldPlayer : NetworkBehaviour
     public float jumpSpeed = 50f; // m/s²
     public NetworkVariable<Color> color = new NetworkVariable<Color>();
     public Keybinds keybinds = Keybinds.defaultKeybinds();
-    public static HelloWorldPlayer localPlayer;
+    public static Player localPlayer;
 
     public Rigidbody2D rigidbody;
 
